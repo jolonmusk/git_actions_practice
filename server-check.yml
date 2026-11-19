@@ -1,1 +1,18 @@
-
+name: server-check
+on:
+  workflow_dispatch:        # 버튼으로 수동 실행
+  schedule:
+    - cron: '0 0 * * *'     # 매일 00:00 UTC (한국 09:00)
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 시스템 정보 확인
+        run: |
+          uname -a          # OS·커널
+          uptime            # 가동 시간·부하
+          nproc             # CPU 코어 수
+          free -m           # 메모리
+          df -h             # 디스크
+      - name: 웹 응답 확인
+        run: curl -s -o /dev/null -w "HTTP %{http_code}\n" https://www.google.com
